@@ -25,10 +25,10 @@ main = do
   putStrLn $ show $ bigSubtract [9,10] [9,10]
 
   ----Error cases
-  --putStrLn $ show $ bigSubtract [987] [0,1]
-  --putStrLn $ show $ bigSubtract [9] [456]
-  --putStrLn $ show $ bigSubtract [9] [10]
-  --putStrLn $ show $ bigSubtract [9,999,999,999] [10,999,999,999]
+  -- putStrLn $ show $ bigSubtract [987] [0,1]
+  -- putStrLn $ show $ bigSubtract [9] [456]
+  -- putStrLn $ show $ bigSubtract [9] [10]
+  -- putStrLn $ show $ bigSubtract [9,999,999,999] [10,999,999,999]
 
   putStrLn "Multiplication"
   --3 * 4
