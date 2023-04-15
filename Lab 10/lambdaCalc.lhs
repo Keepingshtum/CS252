@@ -226,10 +226,9 @@ Alternately, we could define plus with our scc function:
 
 > plus' = \m -> \n -> m scc n
 
-
 Define multiplication in a similar manner:
 
-> multiply = error "TBD"
+> multiply = \m -> \n -> m (plus' n) zero
 
 
 For ease of use, you may use the following function to convert a Haskell integer
@@ -252,6 +251,9 @@ omega = (\x -> x x) (\x -> x x)
 Haskell will not accept the above combinator.
 Evaluate this function by hand yourself.
 After one step, what do you get?
+
+omega = (\x -> x x) (\x -> x x)
+= (\x -> x x) (\x -> x x) (\x -> x x) (\x -> x x) - substituting x with (\x -> x x)
 
 
 The omega function is not terribly useful, though it is interesting.
@@ -286,3 +288,11 @@ factorial = fix g
 
 To understand how this works, write out the evaluation steps for `factorial 3`.
 
+factorial 3 = fix g 3
+= g (fix g) 3
+= multiply 3 (fig g 2)
+= multiply 3 (multiply 2 (fix g 1))
+= multiply 3 (multiply 2 multiply 1 1)
+= multiply 3 (multiply 2 1)
+= multiply 3 (2)
+= 6
