@@ -52,16 +52,18 @@ typecheck e@(EIf e1 e2 e3) env =
       t3 = typecheck e3 env
   in if t1 == TBool && t2 == t3 then t2 else typecheckFail e
 typecheck e@(EIsZero e1) env = case typecheck e1 env of
-  TInt  -> TInt
+  TInt  -> TBool
   _     -> typecheckFail e
 typecheck e@(EVar x) env =  case Map.lookup x env of
   Just t  -> t
-  Nothing -> typecheckFail e
+  _ -> typecheckFail e
 typecheck e@(ELambda x tin e') env = 
   let env' = Map.insert x tin env
       tout = typecheck e' env'
   in TFun tin tout
-typecheck e@(EApp e1 e2) env = error "TBD"
+typecheck e@(EApp e1 e2) env = case typecheck e1 env of
+  TFun t1 t2 -> t2
+  t1 -> typecheck e2 env
 
 
 --Some sample cases
