@@ -5,6 +5,32 @@ class Tree
     @left = left
     @right = right
   end
+
+  def each_node(&block)
+    yield self.value
+    left.each_node(&block) if left
+    right.each_node(&block) if right
+  end
+
+  def method_missing(m)
+    directions = m.to_s.split("_")
+    current = self
+    directions.each do |dir|
+      if dir == "left"
+        current = current.left
+      elsif dir == "right"
+        current = current.right
+      else
+        puts "Didn't understand #{m}"
+        return
+      end
+      if current.nil?
+        puts "Hit a nil node while following #{dir} in #{m}"
+        return
+      end
+    end
+    current.value
+  end
 end
 
 my_tree = Tree.new(42,
