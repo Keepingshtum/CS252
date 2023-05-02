@@ -104,26 +104,26 @@ function expect(f) {
 }
 
 
-function contract(preconditionsList, results, contractFunction) {
+function contract(prelist, post, f) {
   let handler = {
     apply: function (thisFunc, thisObj, thisArg) {
       for (let k in thisArg) {
-        let preconditionsValid = preconditionsList[k].call(thisObj, thisArg[k]);
+        let preconditionsValid = prelist[k].call(thisObj, thisArg[k]);
         if (!preconditionsValid) {
-          throw { "message": "Contract violation in position " + k + ". Expected " + preconditionsList[k].expected + " but received " + thisArg[k] + ".  Blame -> Top-level code" };
+          throw { "message": "Contract violation in position " + k + ". Expected " + prelist[k].expected + " but received " + thisArg[k] + ".  Blame -> Top-level code" };
         }
       }
 
       let actualResults = thisFunc.apply(thisObj, thisArg);
-      if (!results(actualResults)) {
-        throw { "message": "Contract violation. Expected " + results.expected + " but returned " + actualResults + ". Blame -> " + contractFunction.name };
+      if (!post(actualResults)) {
+        throw { "message": "Contract violation. Expected " + post.expected + " but returned " + actualResults + ". Blame -> " + f.name };
       }
 
       return actualResults;
     }
   };
 
-  let prox = new Proxy(contractFunction, handler);
+  let prox = new Proxy(f, handler);
   return prox;
 }
 
